@@ -1,0 +1,8 @@
+sample.tex
+*.aux
+*.ps
+*.dvi
+*.blg
+*.bbl
+*.log
+*.tps
