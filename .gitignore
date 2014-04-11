@@ -6,3 +6,14 @@ sample.tex
 *.bbl
 *.log
 *.tps
+*.aux~
+*.ps~
+*.dvi~
+*.blg~
+*.bbl~
+*.log~
+*.tps~
+*.tex~
+.gitignore~
+.backup
+.out
