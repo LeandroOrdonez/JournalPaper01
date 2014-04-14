@@ -1,15 +1,16 @@
 \section{Proposal}
+\label{proposal}
 
 \subsection{Analysis of Web Service documentation sources}
 \label{subsec:analysis-ws-doc}
-As evidenced in the study by Maleshkova et al. [18], web service documentation is often limited by the content that API developers provide on their websites. SOAP services are a special case, whose main descriptor is a WSDL document, which defines an abstract service interface (information regarding operations, messages and types) and concrete details about transport and location of the service. Following subsections deal with the description of mechanisms for extraction of technical information regarding service functionality, from various documentation sources: WSDL descriptors for SOAP services, and HTML pages for XML-RPC and REST services.
+As evidenced in the study by Maleshkova et al. \cite{Maleshkova:2010}, web service documentation is often limited by the content that API developers provide on their websites. SOAP services are a special case, whose main descriptor is a WSDL document, which defines an abstract service interface (information regarding operations, messages and types) and concrete details about transport and location of the service. Following subsections deal with the description of mechanisms for extraction of technical information regarding service functionality, from various documentation sources: WSDL descriptors for SOAP services, and HTML pages for XML-RPC and REST services.
 
 \subsubsection{SOAP Services}
 \label{subsubsec:soap}
 WSDL is an XML standard format for Web service description [32]. A WSDL document describes service interface abstractly and provides concrete technical details about service operation. This may be visualized in figure \ref{wsdl-Structure}, which shows the structure of a WSDL descriptor.
 
 \begin{figure}
-\includegraphics[scale=0.45]{images/wsdl-structure-en}
+\includegraphics[scale=0.40]{images/wsdl-structure-en}
 
 \caption{Structure of WSDL descriptor.}
 \label{wsdl-Structure}
@@ -28,7 +29,7 @@ Additionally, WSDL allows natural language description for some of the service i
 mentioned elements. This model is shown in figure \ref{wsdl-Simplified}.
 
 \begin{figure}
-\center\includegraphics[scale=0.65]{images/wsdl-simplified}
+\center\includegraphics[scale=0.6]{images/wsdl-simplified}
 
 \caption{Simple model for describing SOAP Services.}
 \label{wsdl-Simplified}
@@ -36,7 +37,7 @@ mentioned elements. This model is shown in figure \ref{wsdl-Simplified}.
 \end{figure}
 
 In the model above, \emph{DataElement} and \emph{ComplexDataElement} elements represent \emph{simple }and\emph{ complex types} (\emph{types})
-respectively, which compose the message exchanged when invoking a service operation. Typically the terms used in defining such elements of the WSDL descriptor follow naming conventions commonly adopted by programmer, e.g. using \texttt{CamelCase} compound words for identifying operations, types and services. Similarly, sometimes documentation tags contain HTML encoded data. Therefore it is necessary to get the content into a proper format to enable further processing. This involves the use of text mining techniques such as \emph{tokenization},\emph{POS (Part-of-speech) tagging } and \emph{spell checking} whose description is addressed in section \ref{sub:Service-documentation-cleaning}.
+respectively, which compose the message exchanged when invoking a service operation. Typically the terms used in defining such elements of the WSDL descriptor follow naming conventions commonly adopted by programmer, e.g. using \texttt{CamelCase} compound words for identifying operations, types and services. Similarly, sometimes documentation tags contain HTML encoded data. Therefore it is necessary to get the content into a proper format to enable further processing. This involves the use of text mining techniques such as \emph{tokenization},\emph{POS (Part-of-speech) tagging } and \emph{spell checking} whose description is addressed in section \ref{subsub:Service-documentation-cleaning}.
 
 \subsubsection{XML-RPC and REST Services}
 \label{subsubsec:rpc-rest}
@@ -65,7 +66,7 @@ Then the operation description blocks are extracted, by following the steps belo
 By following the above procedure, it is possible to identify and extract the textual data from operation description blocks, such as that illustrated in Figure \ref{xml-rpc-op-block}.
 
 \begin{figure}
- \includegraphics[scale=0.55]{images/xml-rpc-operation-block}
+ \includegraphics[scale=0.5]{images/xml-rpc-operation-block}
 
  \caption{Operation description block - XML-RPC service. {\scriptsize Source:
  \protect\href{http://www.benchmarkemail.com/API/Library}{http://www.benchmarkemail.com/API/Library}}}
@@ -80,7 +81,7 @@ Documentation of this kind of services, provided as HTML pages, is focused on th
 (\texttt{GET, POST, PUT, DELETE}, etcetera) for each of the resources hosted by the service. See for example the documentation available on the website of the twitter API for developers shown in Figure \ref{twitter-rest-api}.
 
 \begin{figure}
-\includegraphics[scale=0.38]{images/twitter-rest-api}
+\includegraphics[scale=0.33]{images/twitter-rest-api}
 
 \caption{Documentation of the Twitter REST API.{\scriptsize{} Source: \protect\href{https://dev.twitter.com/docs/api/1.1}{https://dev.twitter.com/docs/api/1.1}}}
 \label{twitter-rest-api}
@@ -107,7 +108,7 @@ This way, the entropy measure estimates the similarity between the document segm
 \label{subsub:Service-documentation-cleaning}
 Often, the information that developers provide in service descriptors follows naming conventions commonly used in programming languages, in particular they use compound words such as \emph{helloword}, \emph{hello\_world} or \emph{helloWord} for identifying operations, resources and parameters. Also, it might be possible for descriptions in natural language to include content encoded into HTML or XML tags, which are used for formatting the text or providing structure to it. 
 
-A requirement for further analyze the information extracted from service documentation (see end of section \ref{sub:REST-APIs}) consists in processing such information and turning it into plain text, which involves splitting compound words and getting rid of HTML or XML tags. To this end it has been decided to use certain text mining techniques, including \emph{tokenization}, \emph{spell checking }and \emph{POS tagging}, whose description is addressed below. 
+A requirement for further analyze the information extracted from service documentation (see end of section \ref{sec:motivation_background}) consists in processing such information and turning it into plain text, which involves splitting compound words and getting rid of HTML or XML tags. To this end it has been decided to use certain text mining techniques, including \emph{tokenization}, \emph{spell checking }and \emph{POS tagging}, whose description is addressed below. 
 
 \paragraph{Tokenization}
 \label{parag:tokenization}
