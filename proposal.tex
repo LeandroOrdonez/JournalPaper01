@@ -1,13 +1,15 @@
 \section{Proposal}
-\label{proposal}
+\label{sec:proposal}
+
+This section addresses a detailed description of the foundations of our proposal. First, the analysis of Web services documentation is outlined, then the probabilistic topic model used for deriving the hidden semantic structure from such documentation is introduced, and finally the formal model for representing that semantic structure is explained.
 
 \subsection{Analysis of Web Service documentation sources}
 \label{subsec:analysis-ws-doc}
-As evidenced in the study by Maleshkova et al. \cite{Maleshkova:2010}, web service documentation is often limited by the content that API developers provide on their websites. SOAP services are a special case, whose main descriptor is a WSDL document, which defines an abstract service interface (information regarding operations, messages and types) and concrete details about transport and location of the service. Following subsections deal with the description of mechanisms for extraction of technical information regarding service functionality, from various documentation sources: WSDL descriptors for SOAP services, and HTML pages for XML-RPC and REST services.
+As evidenced in the study by Maleshkova et al. \cite{Maleshkova:2010}, web service documentation is often limited by the content that API developers provide on their websites. SOAP services are a special case, whose main descriptor is a WSDL document, which defines an abstract service interface (information regarding operations, messages and types) and concrete details about transport and location of the service. Following subsections deal with the description of mechanisms for extracting technical information regarding service functionality, from various documentation sources: WSDL descriptors for SOAP services, and HTML pages for XML-RPC and REST services.
 
 \subsubsection{SOAP Services}
 \label{subsub:soap}
-WSDL is an XML standard format for Web service description [32]. A WSDL document describes service interface abstractly and provides concrete technical details about service operation. This may be visualized in figure \ref{wsdl-Structure}, which shows the structure of a WSDL descriptor.
+WSDL is an XML standard format for Web service description. A WSDL document describes service interface abstractly and provides concrete technical details about service operation. This may be visualized in figure \ref{wsdl-Structure}, which shows the structure of a WSDL descriptor.
 
 \begin{figure}
 \includegraphics[scale=0.40]{images/wsdl-structure-en}
@@ -25,7 +27,7 @@ The diagram of figure \ref{wsdl-Structure}, shows the separation between service
  \item \textit{Operation}: abstracts service functional units. This descriptor element is associated with a set of input/output messages.
 \end{itemize}
 
-Additionally, WSDL allows natural language description for some of the service interface elements, including: service, binding, portType, operation, message and types. Such a description is provided by service developers and is enclosed within a special tag called documentation. As argued by Falleri in [8], typically there is some redundancy in the information contained in certain elements of service interface. Thus, for instance, terms defining ports, bindings and portTypes are frequently the same used for describing the service element; likewise terms defining input/output messages, are slight variations of the term specifying their associated operation. In consequence, it was decided that information extraction from service descriptor only takes the content of service, operation and types elements into account, including their natural language descriptions (when available). This way, it is possible to obtain a simplified model of the information the service interface contains, considering the three 
+Additionally, WSDL allows natural language description for some of the service interface elements, including: service, binding, portType, operation, message and types. Such a description is provided by service developers and is enclosed within a special tag called \texttt{documentation}. Typically there is some redundancy in the information contained in certain elements of service interface. Thus, for instance, terms defining ports, bindings and portTypes are frequently the same used for describing the service element; likewise terms defining input/output messages, are slight variations of the term specifying their associated operation. In consequence, it was decided that information extraction from service descriptor only takes the content of service, operation and types elements into account, including their natural language descriptions (when available). This way, it is possible to obtain a simplified model of the information the service interface contains, considering the three 
 mentioned elements. This model is shown in figure \ref{wsdl-Simplified}.
 
 \begin{figure}
@@ -37,13 +39,13 @@ mentioned elements. This model is shown in figure \ref{wsdl-Simplified}.
 \end{figure}
 
 In the model above, \emph{DataElement} and \emph{ComplexDataElement} elements represent \emph{simple }and\emph{ complex types} (\emph{types})
-respectively, which compose the message exchanged when invoking a service operation. Typically the terms used in defining such elements of the WSDL descriptor follow naming conventions commonly adopted by programmer, e.g. using \texttt{CamelCase} compound words for identifying operations, types and services. Similarly, sometimes documentation tags contain HTML encoded data. Therefore it is necessary to get the content into a proper format to enable further processing. This involves the use of text mining techniques such as \emph{tokenization},\emph{POS (Part-of-speech) tagging } and \emph{spell checking} whose description is addressed in section \ref{subsub:Service-documentation-cleaning}.
+respectively, which compose the message exchanged when invoking a service operation. Typically the terms used in defining such elements of the WSDL descriptor follow naming conventions commonly adopted by programmer, e.g. using \texttt{CamelCase} compound words for identifying operations, types and services. Similarly, sometimes documentation tags contain HTML encoded data. Therefore it is necessary to get the content into a proper format to enable further processing. This involves the use of text mining techniques such as \emph{tokenization}, \emph{POS (Part-of-speech) tagging } and \emph{spell checking} whose description is addressed in section \ref{subsub:Service-documentation-cleaning}.
 
 \subsubsection{XML-RPC and REST Services}
 \label{subsubsec:rpc-rest}
 As it was mentioned at the beginning of section \ref{subsec:analysis-ws-doc}, Web service documentation---except for SOAP services---doesn't meet
 any standard format. XML-RPC and REST services, are commonly described by HTML pages, which provide information regarding service functionality and endpoints \footnote{For example: (XML-RPC) ,\href{http://www.benchmarkemail.com/API/Library}{http://www.benchmarkemail.com/API/Library} (REST) \href{https://dev.twitter.com/docs/api/1.1}{https://dev.twitter.com/docs/api/1.1}}. Usually the content of such pages doesn't follow a formal structure, making it difficult to extract relevant information in an automated way. There are some initiatives, including \emph{ProgrammableWeb} and
-\emph{APIhub} \footnote{Available at: \href{http://www.apihub.com/}{http://www.apihub.com/}}, which promotes the creation of centralized API directories, where service documentation is uniformly stored, by following a regularstructure. However, a major issue regarding these initiatives is that documentation must be registered manually, so more often than not the information provided either contains errors (typos, broken links) or is outdated.
+\emph{APIhub} \footnote{Available at: \href{http://www.apihub.com/}{http://www.apihub.com/}}, which promotes the creation of centralized API directories, where service documentation is uniformly stored, by following a regular structure. However, a major issue regarding these initiatives is that documentation must be registered manually, so more often than not the information provided either contains errors (typos, broken links) or is outdated.
 
 Given this limitation, it was decided to deal with documentation that developers provide on API websites. This way, we apply on each HTML page an analysis that involves identifying recurring patterns (which depends on the service type, either XML-RPC or REST) and document segmentation for extracting relevant information regarding service functionality. This analysis is supported on the approach of Ly et al. formulated in \cite{Ly:2012}.
 
@@ -133,10 +135,10 @@ It is clear for a human that strings \textquotedblleft{}\emph{homeaddress}\textq
 
 \paragraph{Part-of-speech (POS) tagging}
 \label{parag:part-of-speech}
-This technique, is used for detecting candidate operations described in the documentation of XML-RPC services. According to the analysis outlined in section \ref{sub:Analysis-of-XML-RPC}, the operations hosted by this kind of services, are frequently identified by \texttt{CamelCase} terms joining at least a verb and a noun (e. g., \emph{getWeather}). POS tagging allows specifying the \emph{lexical category} (verb, noun, pronoun, adverb, etcetera) corresponding to each term in a text or sentence. This way it is possible to filter out the compound words included in XML-RPC service documentation and extracting the set of candidate operations. The POS tagging technique used in our case is the one conceived by Toutanova, outlined in \cite{Toutanova:2003} and developed inside The \emph{Stanford Natural Language Processing Group}.
+This technique, is used for detecting candidate operations described in the documentation of XML-RPC services. According to the analysis outlined in section \ref{parag:rpc}, the operations hosted by this kind of services, are frequently identified by \texttt{CamelCase} terms joining at least a verb and a noun (e. g., \emph{getWeather}). POS tagging allows specifying the \emph{lexical category} (verb, noun, pronoun, adverb, etcetera) corresponding to each term in a text or sentence. This way it is possible to filter out the compound words included in XML-RPC service documentation and extracting the set of candidate operations. The POS tagging technique used in our case is the one conceived by Toutanova, outlined in \cite{Toutanova:2003} and developed inside The \emph{Stanford Natural Language Processing Group}.
 
 By applying the techniques explained above on the documentation of Web services, the noise involved in the statistical analysis intended
-to identify groups of similar services is reduced. As defined at the end of section \ref{sub:REST-APIs}, this analysis is the second of the key processes that comprise the approach documented herein. The description of this second process is addressed in the section below.
+to identify groups of similar services is reduced. As defined at the end of section \ref{sec:motivation_background}, this analysis is the second of the key processes that comprise the approach documented herein. The description of this second process is addressed in the section below.
 
 \subsection{Discovering the semantic structure of Web service documentation by applying Probabilistic topic modeling}
 \label{subsec:probabilistic-topic-models}
@@ -154,7 +156,7 @@ A common application of probabilistic topic model algorithms is the categorizati
 
 LDA is one of the most basic and widely adopted probabilistic topic models used for identifying the abstract themes that pervade a documentary corpus \cite{Blei:2003}. In statistical terms, LDA in one of the so-called generative models, which allows sets of observations (i.e. documents) to be explained by hidden or latent variables (topics).
 
-The intuition behind LDA is to assume that documents in the corpus deal with not only one but several topics. This report for example is about \emph{Web services}, \emph{Semantics}, \emph{Topic models}, and \emph{REST}. LDA estimates that documents are generated through the random process outlined below (see Figure \ref{lda-gen-process}): 
+The intuition behind LDA is to assume that documents in the corpus deal with not only one but several topics. This paper for example is about \emph{Web services}, \emph{Semantics}, \emph{Topic models}, and \emph{REST}. LDA estimates that documents are generated through the random process outlined below (see Figure \ref{lda-gen-process}): 
 
 \begin{figure}
 \includegraphics[scale=0.40]{images/lda-gen-model-eng}
@@ -247,7 +249,7 @@ This way, the posterior estimation which was originally an inference problem, be
 \subsubsection{Application of LDA over information extracted from services documentation}
 \label{subsub:Application-of-LDA}
 
-The previous section addressed a study of the LDA topic model, which allow to define the hidden topics that run through a collection of documents. Topics in LDA may be devised as categories  that comprises semantically-related elements. This categorization, as opposed to traditional clustering techniques (like \emph{K-means}) is non-exclusive since a document from the collection may belong to multiple categories\footnote{Theoretically, all documents belong to all categories but, only few categories have a meaningful proportion of each document content.}. This way, LDA enables to expose useful relations within the collection not only at the document level but at the topic level too. 
+The previous section addressed a study of the LDA topic model, which allow to define the hidden topics that run through a collection of documents. Topics in LDA may be devised as categories  that comprises semantically-related elements. This categorization, as opposed to traditional clustering techniques (like \emph{K-means}) is non-exclusive since a document from the collection may belong to multiple categories\footnote{Theoretically, all documents belong to all categories but, only few categories have a meaningful proportion of each document content.}. This way, LDA enables to expose useful relations within the collection not only at the documents level but at the topics level too. 
 
 The approach documented herein, comprises the application of the LDA model on the information extracted from the Web services documentation (according to the process outlined in section \ref{subsec:analysis-ws-doc}), for automatically categorizing and annotating it. Given that the service documentation focuses on describing the service operations (for SOAP and XML-RPC services) and services resources (for REST services), it was decided to generate a document for each operation/resource, containing the information related to it, that is, the categorization is performed at the operation/resource level.
 
@@ -258,7 +260,7 @@ In section \ref{sec:experimentation} we describe a prototype developed based on 
 \subsection{\emph{KNOWEB-S}: an RDF taxonomy for representing the derived service categorization}
 \label{subsec:KNOWEB-S-RDF}
 
-The third of the processes that shape the solution proposed in this approach, involves the construction of a taxonomy that formally encodes and represents the category structure generated by applying online LDA on Web services documentation. This taxonomy has been called \emph{KNOWEB-S} (\emph{KNOwledge representation for Web Services}). For specifying KNOWEB-S it was decided to use the data model that RDF embodies \cite{W3C:2004}, given the reasons listed below:
+The third of the processes that shape the solution proposed in this approach, involves the construction of a taxonomy that formally encodes and represents the category structure generated by applying online LDA on Web services documentation. This taxonomy has been called \emph{KNOWEB-S} (\emph{KNOwledge representation for WEB Services}). For specifying KNOWEB-S it was decided to use the data model that RDF embodies \cite{W3C:2004}, given the reasons listed below:
 
 \begin{itemize}
 \item \emph{Simplicity}: RDF allows to describe resources as statements in the form (\emph{subject}, \emph{predicate}, \emph{object}) or (\emph{resource}, \emph{property}, \emph{value}) called \emph{triples}.
@@ -299,7 +301,7 @@ In the same way, the ``\emph{has term}'' relation between categories and terms i
 
 Given these constraints, Figure \ref{data-model-KNOWEBS} shows the entity-relationship diagram for KNOWEB-S:
 
-\begin{figure}
+\begin{figure}[H]
 \includegraphics[scale=0.43]{images/KNOWEB-S-ER-en}
 
 \caption{Entity-Relationship diagram of KNOWEB-S.}
@@ -307,7 +309,7 @@ Given these constraints, Figure \ref{data-model-KNOWEBS} shows the entity-relati
 
 \end{figure}
 
-The previous diagram may be interpreted as follows: \textquotedblleft{}\emph{Documents} \emph{are members of} multiple \emph{Categories}, with certain \emph{membership probability}. In turn, \emph{Categories} \emph{has} multiple \emph{terms}, each one of them with a certain \emph{relevance}\textquotedblright{}. 
+The previous diagram may be interpreted as follows: \textquotedblleft{}\emph{Documents} \emph{are members of} multiple \emph{Categories}, with certain \emph{membership probability}. In turn, \emph{Categories} \emph{have} multiple \emph{terms}, each one of them with a certain \emph{relevance}\textquotedblright{}. 
 
 Next section details how to specify the KNOWEB-S data model in RDF. 
 
